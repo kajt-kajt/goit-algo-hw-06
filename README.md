@@ -23,10 +23,10 @@
 Let's display some graph properties.
 General characteristics:  DiGraph with 16 nodes and 29 edges
 Nodes properties: 
-start  ->  {'layer': 1000}
+start  ->  {'estimate': 0, 'layer': 1000}
    node degre:  2
    betweenness centrality:  0.0
-end  ->  {'layer': 965}
+end  ->  {'estimate': 0, 'layer': 965}
    node degre:  3
    betweenness centrality:  0.0
 SYS01  ->  {'title': 'Create new AWS account', 'estimate': 1, 'layer': 995}
@@ -97,10 +97,10 @@ Edges properties:
 ('SYS07', 'SYS12')  ->  {'weight': 8}
 ('SYS08', 'SYS09')  ->  {'weight': 2}
 ('SYS08', 'OPS03')  ->  {'weight': 2}
-('SYS09', 'end')  ->  {'weight': 0}
+('SYS09', 'end')  ->  {'weight': 8}
 ('OPS03', 'TEST01')  ->  {'weight': 16}
-('SYS12', 'end')  ->  {'weight': 0}
-('TEST01', 'end')  ->  {'weight': 0}
+('SYS12', 'end')  ->  {'weight': 4}
+('TEST01', 'end')  ->  {'weight': 24}
 ```
 
 Посередництво вузла (betweenness centrality) для даного контексту може бути індикатором важливості задачі, наскільки вона є блокуючою для подальшого прогресу при роботі над проектом.
