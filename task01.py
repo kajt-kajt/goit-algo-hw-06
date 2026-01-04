@@ -33,6 +33,8 @@ with open("tasks.json", "r", encoding = "utf-8") as f:
 tasks = nx.DiGraph()
 # Creating nodes
 tasks.add_nodes_from(["start", "end"])
+tasks.nodes["start"]["estimate"] = 0
+tasks.nodes["end"]["estimate"] = 0
 for task in tasks_loaded["tasks"]:
     tasks.add_node(task["id"], title = task["title"], estimate = int(task["estimate"]))
 # Creating edges
@@ -46,34 +48,35 @@ for task in tasks_loaded["tasks"]:
 
 for node in tasks.nodes():
     if tasks.out_degree(node) == 0 and node != "end":
-        tasks.add_edge(node, "end", weight = 0)
+        tasks.add_edge(node, "end", weight = tasks.nodes[node]["estimate"])
 
-bfs_assign_layers(tasks, "start")
+if __name__ == "__main__":
+    bfs_assign_layers(tasks, "start")
+    print("Let's display some graph properties.")
+    print("General characteristics: ", tasks)
+    betweenness_centrality = nx.betweenness_centrality(tasks)
+    print("Nodes properties: ")
+    for node in tasks.nodes:
+        print(node," -> ",tasks.nodes[node])
+        print("   node degre: ", nx.degree(tasks, node))
+        print("   betweenness centrality: ", betweenness_centrality[node])
+    print("Edges properties: ")
+    for edge in tasks.edges:
+        print(edge," -> ",tasks.edges[edge])
 
-print("Let's display some graph properties.")
-print("General characteristics: ", tasks)
-betweenness_centrality = nx.betweenness_centrality(tasks)
-print("Nodes properties: ")
-for node in tasks.nodes:
-    print(node," -> ",tasks.nodes[node])
-    print("   node degre: ", nx.degree(tasks, node))
-    print("   betweenness centrality: ", betweenness_centrality[node])
-print("Edges properties: ")
-for edge in tasks.edges:
-    print(edge," -> ",tasks.edges[edge])
+    # Let's visualize graph
+    nx.draw(tasks,
+            nx.multipartite_layout(tasks, 
+                                   subset_key = 'layer', 
+                                   align = "horizontal", 
+                                   scale = 100),
+            with_labels = True,
+            width = 1,
+            arrows = True,
+            node_size = 2000,
+            node_color = "lightblue",
+            edge_color = "grey"
+            )
+    plt.title(tasks_loaded["description"])
+    plt.show()
 
-# Let's visualize graph
-nx.draw(tasks,
-        nx.multipartite_layout(tasks, 
-                               subset_key = 'layer', 
-                               align = "horizontal", 
-                               scale = 100),
-        with_labels = True,
-        width = 1,
-        arrows = True,
-        node_size = 2000,
-        node_color = "lightblue",
-        edge_color = "grey"
-        )
-plt.title(tasks_loaded["description"])
-plt.show()

@@ -4,6 +4,8 @@
 Вершини графа - задачі, ребра - залежності між ними. 
 Граф орієнтований та ациклічний (циклічні залежності між задачами не мають сенсу).
 
+[json файл з описом задач проекту](./tasks.json)
+
 Для зручності застосування базових алгоритмів додамо ще 2 вершини - "start" та "end". 
 "start" матиме вихідні ребра до всіх вершин без залежностей (ті, з яких можна починати проект).
 "end" має вхідні ребра з усіх вершин, які не є залежностями для інших.
@@ -100,3 +102,44 @@ Edges properties:
 ('SYS12', 'end')  ->  {'weight': 0}
 ('TEST01', 'end')  ->  {'weight': 0}
 ```
+
+Посередництво вузла (betweenness centrality) для даного контексту може бути індикатором важливості задачі, наскільки вона є блокуючою для подальшого прогресу при роботі над проектом.
+
+## Задача 2
+
+```
+BFS traversal order: 
+['start', 'SYS01', 'NET01', 'NET02', 'SEC01', 'SYS03', 'SYS05', 'SYS06', 'SYS08', 'SYS04', 'SYS07', 'SYS09', 'OPS03', 'SYS12', 'end', 'TEST01']
+DFS traversal order: 
+['start', 'NET01', 'NET02', 'SYS03', 'OPS03', 'TEST01', 'end', 'SYS09', 'SYS07', 'SYS12', 'SYS04', 'SEC01', 'SYS08', 'SYS06', 'SYS05', 'SYS01']
+DFS postorder traversal order inversed becomes task execution plan: 
+['start', 'NET01', 'SYS01', 'NET02', 'SYS03', 'SYS07', 'SYS04', 'SEC01', 'SYS08', 'SYS06', 'SYS05', 'SYS12', 'OPS03', 'TEST01', 'SYS09', 'end']
+```
+
+BFS обхід заданого графа використовується також у task01.py для розподілу вершин по рівнях для більш наочної візуалізації.
+
+Для обраного набору даних цікавим є DFS postorder порядок обходу, бо інвертувавши його можна отримати план виконання задач з урахуванням залежностей.
+
+## Задача 3
+
+```
+Execute NET01 of duration 1, total time spent 1
+Execute NET02 of duration 4, total time spent 5
+Execute SEC01 of duration 8, total time spent 13
+Execute SYS05 of duration 4, total time spent 17
+Execute SYS12 of duration 4, total time spent 21
+--------------------
+Execute SYS01 of duration 1
+Execute NET02 of duration 4
+Execute SEC01 of duration 8
+Execute SYS08 of duration 2
+Execute OPS03 of duration 16
+Execute TEST01 of duration 24
+Total time spent: 55
+```
+
+Функція dijkstra (перший вивід знайденого шляху) вираховує найшвидший "маршрут" між "start" та "end".
+Алгоритм Дейкстри для пошуку найкоротшого шляху в графі не має особливого сенсу для обраного прикладу застосунку.
+
+dijkstra_modified рахує найдовший шлях, що відповідає мінімальному розрахунковому часу, за який проект можна теоретично виконати.
+
