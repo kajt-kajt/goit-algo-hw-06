@@ -1,0 +1,88 @@
+{ "project": "new_production",
+  "description": "Build new production environment for Internet Store",
+  "tasks":[
+    {
+       "id":"SYS01",
+       "title": "Create new AWS account",
+       "estimate": "1",
+       "dependency": []
+    },
+    {
+       "id": "NET01",
+       "title": "Get new internal subnet assignment from Network Architect",
+       "estimate": "1",
+       "dependency": []
+    },
+    {
+        "id": "NET02",
+        "title": "Create new VPC",
+        "estimate": "4",
+        "dependency": ["SYS01", "NET01"]
+    },
+    {
+        "id": "SEC01",
+        "title": "Basic security settings of new AWS account",
+        "estimate": "8",
+        "dependency": ["NET02"]
+    },
+    {
+        "id": "SYS03",
+        "title": "Create ssh bastion host EC2",
+        "estimate": "16",
+        "dependency": ["NET02"]
+    },
+    {
+        "id": "SYS04",
+        "title": "Create web-nodes EC2",
+        "estimate": "16",
+        "dependency": ["SYS03"]
+    },
+    {
+        "id": "SYS05",
+        "title": "Create database RDS instances",
+        "estimate": "4",
+        "dependency": ["SEC01"]
+    },
+    {
+        "id": "SYS06",
+        "title": "Create Redis cluster instances (ElastiCache)",
+        "estimate": "4",
+        "dependency": ["SEC01"]
+    },
+    {
+        "id": "SYS07",
+        "title": "Create glusterfs EC2 cluster",
+        "estimate": "8",
+        "dependency": ["SYS03"]
+    },
+    {
+        "id": "SYS08",
+        "title": "Create Load balancer",
+        "estimate": "2",
+        "dependency": ["SEC01"]
+    },
+    {
+        "id": "SYS09",
+        "title": "Setup monitoring for new instances",
+        "estimate": "8",
+        "dependency": ["SYS03", "SYS04", "SYS05", "SYS06", "SYS07", "SYS08"]
+    },   
+    {
+        "id": "OPS03",
+        "title": "Create deploy pipeline",
+        "estimate": "16",
+        "dependency": ["SYS03", "SYS04", "SYS05", "SYS06", "SYS07", "SYS08"]
+    },     
+    {
+        "id": "SYS12",
+        "title": "Setup backups",
+        "estimate": "4",
+        "dependency": ["SYS05", "SYS07"]
+    },
+    {
+        "id": "TEST01",
+        "title": "Test new environment functionality",
+        "estimate": "24",
+        "dependency": ["OPS03"]
+    }
+]}
